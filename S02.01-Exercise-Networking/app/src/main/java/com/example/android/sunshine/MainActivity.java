@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.utilities.NetworkUtils;
 import com.example.android.sunshine.utilities.OpenWeatherJsonUtils;
 
@@ -47,9 +48,15 @@ public class MainActivity extends AppCompatActivity {
 
 
         // TODO (9) Call loadWeatherData to perform the network request to get the weather
+        loadWeatherData();
     }
 
-    // TODO (8) Create a method that will get the user's preferred location and execute your new AsyncTask and call it loadWeatherData
+        // TODO (8) Create a method that will get the user's preferred location and execute your new AsyncTask and call it loadWeatherData
+        private void loadWeatherData () {
+            String location = SunshinePreferences.getPreferredWeatherLocation(this);
+            new FetchWeatherTask().execute(location);
+        }
+
 
     // TODO (5) Create a class that extends AsyncTask to perform network requests
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
@@ -74,8 +81,19 @@ public class MainActivity extends AppCompatActivity {
                 return null;
             }
         }
+
+        // TODO (7) Override the onPostExecute method to display the results of the network request
+        @Override
+        protected void onPostExecute(String [] weatherInfo) {
+            if (weatherInfo != null) {
+                for (String weatherString : weatherInfo) {
+                    mWeatherTextView.append(weatherString + "\n\n\n");
+                }
+            }
+        }
+
     }
 
 
-    // TODO (7) Override the onPostExecute method to display the results of the network request
+
 }
