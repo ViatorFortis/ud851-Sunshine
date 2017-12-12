@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.sunshine.data.SunshinePreferences;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mErrorMessageDisplayTextView;
 
     // TODO (16) Add a ProgressBar variable to show and hide the progress bar
+    private ProgressBar mContentLoadingPrgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +53,10 @@ public class MainActivity extends AppCompatActivity {
         mWeatherTextView = (TextView) findViewById(R.id.tv_weather_data);
 
         // TODO (7) Find the TextView for the error message using findViewById
-        mErrorMessageDisplayTextView = (TextView) findViewById(R.id.error_message_display);
+        mErrorMessageDisplayTextView = (TextView) findViewById(R.id.tv_error_message_display);
 
         // TODO (17) Find the ProgressBar using findViewById
+        mContentLoadingPrgressBar = (ProgressBar) findViewById(R.id.pb_content_loading);
 
         /* Once all of our views are setup, we can load the weather data. */
         loadWeatherData();
@@ -65,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private void loadWeatherData() {
         // TODO (20) Call showWeatherDataView before executing the AsyncTask
+        showWeatherDataView();
+
         String location = SunshinePreferences.getPreferredWeatherLocation(this);
         new FetchWeatherTask().execute(location);
     }
@@ -86,6 +91,11 @@ public class MainActivity extends AppCompatActivity {
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
         // TODO (18) Within your AsyncTask, override the method onPreExecute and show the loading indicator
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mContentLoadingPrgressBar.setVisibility(View.VISIBLE);
+        }
 
         @Override
         protected String[] doInBackground(String... params) {
@@ -116,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String[] weatherData) {
             // TODO (19) As soon as the data is finished loading, hide the loading indicator
+            mContentLoadingPrgressBar.setVisibility(View.INVISIBLE);
 
             if (weatherData != null) {
                 // TODO (11) If the weather data was not null, make sure the data view is visible
@@ -127,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
                 for (String weatherString : weatherData) {
                     mWeatherTextView.append((weatherString) + "\n\n\n");
                 }
+                showWeatherDataView();
             }
             // TODO (10) If the weather data was null, show the error message
             else {
