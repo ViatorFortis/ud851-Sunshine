@@ -20,7 +20,11 @@ public class DetailActivity extends AppCompatActivity {
 
         // TODO (2) Display the weather forecast that was passed from MainActivity
         Intent intentToStartDetailActivity = this.getIntent();
-        String weatherForDay = intentToStartDetailActivity.getCharSequenceExtra(Intent.EXTRA_TEXT).toString();
-        mTextView.setText(weatherForDay);
+        if (intentToStartDetailActivity != null) {
+            if (intentToStartDetailActivity.hasExtra(Intent.EXTRA_TEXT) ) {
+                String weatherForDay = intentToStartDetailActivity.getCharSequenceExtra(Intent.EXTRA_TEXT).toString();
+                mTextView.setText(weatherForDay);
+            }
+        }
     }
 }
