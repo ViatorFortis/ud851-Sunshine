@@ -222,6 +222,22 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapterOn
         }
 
         // TODO (2) Launch the map when the map menu item is clicked
+        if(id == R.id.action_openMap) {
+            String city = "Khabarovsk, Russia";
+
+            Uri.Builder uriBuilder = new Uri.Builder();
+            uriBuilder.scheme("geo")
+                    .path("0,0")
+                    .appendQueryParameter("q", "Khabarovsk, Russia");
+            Uri citylocationUri = uriBuilder.build();
+
+            Intent openMapIntent = new Intent(Intent.ACTION_VIEW);
+            openMapIntent.setData(citylocationUri);
+
+            if (openMapIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(openMapIntent);
+            }
+        }
 
         return super.onOptionsItemSelected(item);
     }
