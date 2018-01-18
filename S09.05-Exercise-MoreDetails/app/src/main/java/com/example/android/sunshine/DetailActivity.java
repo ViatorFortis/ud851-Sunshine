@@ -111,6 +111,7 @@ public class DetailActivity extends AppCompatActivity
             throw new NullPointerException("Uri is null");
         }
 //      TODO (35) Initialize the loader for DetailActivity
+        getSupportLoaderManager().initLoader(ID_DETAIL_LOADER, null, this);
     }
 
     /**
@@ -204,6 +205,8 @@ public class DetailActivity extends AppCompatActivity
         if (data == null || data.getCount() < 1) {
             return;
         }
+
+        data.moveToFirst();
 
 //      TODO (26) Display a readable data string
         long weatherDate = data.getLong(INDEX_COLUMN_DATE);
