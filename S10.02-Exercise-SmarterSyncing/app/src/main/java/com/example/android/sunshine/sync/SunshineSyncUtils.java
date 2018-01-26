@@ -15,20 +15,62 @@
  */
 package com.example.android.sunshine.sync;
 
+import android.annotation.SuppressLint;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+
+import com.example.android.sunshine.data.WeatherContract;
 
 
 public class SunshineSyncUtils {
 
-//  TODO (1) Declare a private static boolean field called sInitialized
+    //  TODO (1) Declare a private static boolean field called sInitialized
+    private static boolean sInitialized;
 
     //  TODO (2) Create a synchronized public static void method called initialize
-    //  TODO (3) Only execute this method body if sInitialized is false
-    //  TODO (4) If the method body is executed, set sInitialized to true
-    //  TODO (5) Check to see if our weather ContentProvider is empty
-        //  TODO (6) If it is empty or we have a null Cursor, sync the weather now!
+    @SuppressLint("StaticFieldLeak")
+    synchronized public static void initialize(final Context context) {
+        //  TODO (3) Only execute this method body if sInitialized is false
+        if (sInitialized) {
+            return;
+        }
+        //  TODO (4) If the method body is executed, set sInitialized to true
+        sInitialized = true;
+
+
+        //  TODO (5) Check to see if our weather ContentProvider is empty
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                Uri weatherInfoUri = WeatherContract.WeatherEntry.CONTENT_URI;
+
+                String[] projectionColumns = {WeatherContract.WeatherEntry._ID};
+
+                Cursor weatherInfoCursor = context.getContentResolver().query(
+                        weatherInfoUri,
+                        projectionColumns,
+                        null,
+                        null,
+                        null);
+
+                //  TODO (6) If it is empty or we have a null Cursor, sync the weather now!
+                if (weatherInfoCursor == null || weatherInfoCursor.getCount() == 0) {
+                    startImmediateSync(context);
+                }
+
+                weatherInfoCursor.close();
+                return null;
+            }
+
+        }.execute();
+
+    }
+
 
     /**
      * Helper method to perform a sync immediately using an IntentService for asynchronous
@@ -36,8 +78,10 @@ public class SunshineSyncUtils {
      *
      * @param context The Context used to start the IntentService for the sync.
      */
+
     public static void startImmediateSync(@NonNull final Context context) {
         Intent intentToSyncImmediately = new Intent(context, SunshineSyncIntentService.class);
         context.startService(intentToSyncImmediately);
     }
+
 }
