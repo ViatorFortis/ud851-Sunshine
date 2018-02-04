@@ -89,6 +89,7 @@
             app:layout_constraintLeft_toLeftOf="@+id/weather_icon"
             app:layout_constraintRight_toRightOf="@+id/weather_icon"
             app:layout_constraintTop_toBottomOf="@+id/weather_icon"
+            android:textColor="@color/secondary_text"
             tools:text="Rainy"/>
 
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -110,6 +111,8 @@
             app:layout_constraintLeft_toLeftOf="@+id/horizontal_middle"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/weather_icon"
+            android:textColor="@color/primary_text"
+            android:fontFamily="sans-serif-light"
             tools:text="19\u00b0"/>
 
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -129,6 +132,8 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/weather_description"
             app:layout_constraintLeft_toLeftOf="@+id/high_temperature"
             app:layout_constraintRight_toRightOf="@+id/high_temperature"
+            android:textColor="@color/secondary_text"
+            android:fontFamily="sans-serif-light"
             tools:text="10\u00b0"/>
 
     </android.support.constraint.ConstraintLayout>
